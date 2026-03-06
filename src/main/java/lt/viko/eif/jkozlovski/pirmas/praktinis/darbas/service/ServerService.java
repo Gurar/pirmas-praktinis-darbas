@@ -5,8 +5,11 @@ import org.springframework.stereotype.Component;
 
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Component
 public class ServerService {
@@ -20,6 +23,15 @@ public class ServerService {
                 Socket socket = serverSocket.accept();
                 System.out.println("Client connected");
 
+                byte[] xml = Files.readAllBytes(Path.of("student.xml"));
+
+                OutputStream out = socket.getOutputStream();
+                out.write(xml);
+                out.flush();
+
+                socket.close();
+
+                System.out.println("XML file sent");
             }
         } catch (IOException e) {
 
